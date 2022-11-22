@@ -152,6 +152,7 @@ func gameloop(start *room) {
 			}
 		default:
 			//default case when first start or direction of the room at [0] and boolean ok set to true
+			//if the room has the direction that user type in the ok boolean is true then continue the loop
 			val, ok := (currentroom.directions)[argv[0]]
 			if ok {
 				currentroom = val
