@@ -26,7 +26,7 @@ type room struct {
 	visited     bool
 }
 
-// this function called look has room as a parameter, display room description
+// this function called look has room as a reciever, display room description
 func (r room) look() {
 	fmt.Println(r.description)
 	if len(r.inventory) > 0 { // check if there is any items in a room, then display items
@@ -133,13 +133,13 @@ func gameloop(start *room) {
 				foundinroom := false
 				for _, v := range currentroom.inventory { // found slot machine in casino
 					if v.name == argv[1] {
-						if v.name == "machine" { //play with slot machine that throw random interger 5 times you will win one time
-							v := rand.Intn(5)
-							if v == 1 {
+						if v.name == "machine" {
+							n := rand.Intn(5) // get an integer value between 1-5
+							if n == 1 {       // this will havw 1 in 5 chance to win
 								fmt.Println("you won", score/5, "points!")
-								score = score + score/5
-							} else {
-								fmt.Println("You gave the slot machine", score/10, "points and you didn't win.")
+								score = score + score/5 // give user extra fifth of their score to make the profit proportion to the risk
+							} else { //this will have 4 in 5 chance
+								fmt.Println("You gave the slot machine", score/10, "points and you didn't win.") //the user gambles on tenth of their score every tie they bet
 								score = score - score/10
 							}
 						}
@@ -210,8 +210,8 @@ func main() {
 	           waterfront
 	           =====
 	*/
-	//direction of each room indicate where the room pointer point to
-	// the symbol & is a pointer that point current room direction to the room struct which player should be next
+	//direction of each room indicate where the room refer to
+	// the symbol & is a dereference of pointers that refer to current room direction to the room struct which player should be next
 	startingroom.directions["south"] = &waterroom
 	startingroom.directions["north"] = &mallroom
 	mallroom.directions["south"] = &startingroom
@@ -240,6 +240,7 @@ func main() {
 	casinoroom.inventory = append(casinoroom.inventory, slotmachine)
 	classroom.inventory = append(classroom.inventory, key)
 	canadiantire.inventory = append(canadiantire.inventory, tree)
-	rand.Seed(time.Now().UnixNano())
-	gameloop(&startingroom) //start at the startingroom
+	rand.Seed(time.Now().UnixNano()) // generate random number when you play slot machine
+	gameloop(&startingroom)          //start at the startingroom
+
 }
